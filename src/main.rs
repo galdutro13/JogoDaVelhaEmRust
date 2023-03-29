@@ -20,7 +20,7 @@ impl HangManGame {
     fn new() -> Self {
         let palavras = ler_palavras();
         let palavra_secreta = palavras[rand::random::<usize>() % palavras.len()].to_lowercase();
-        let palavra_chutada= String::with_capacity(palavra_secreta.len()); //vec![None; palavra_secreta.len()].to_string();
+        let palavra_chutada= String::with_capacity(palavra_secreta.len());
         let tentativas_incorretas = 0;
         let letras_chutadas = vec![];
 
@@ -112,16 +112,12 @@ fn ler_chute() -> char {
 }
 
 fn ler_palavras() -> Vec<String> {
+    println!("Qual grupo de palavras você deseja jogar? (1 - Frutas, 2 - Animais, 3 - Cores): ");
 
-    print!("Digite o caminho para o arquivo de palavras: ");
-
-    let mut caminho_ao_arquivo = String::new();
-    io::stdin()
-        .read_line(&mut caminho_ao_arquivo)
-        .expect("Falha ao ler a entrada.");
+    let grupo_de_palavras = match_grupo();
 
     let mut palavras = vec![];
-    let mut arquivo = File::open("palavras.txt").expect("Arquivo não encontrado.");
+    let mut arquivo = File::open(grupo_de_palavras).expect("Arquivo não encontrado.");
     let mut conteudo = String::new();
     arquivo.read_to_string(&mut conteudo).expect("Erro ao ler o arquivo.");
 
@@ -129,6 +125,24 @@ fn ler_palavras() -> Vec<String> {
         palavras.push(palavra.to_lowercase());
     }
 
-    palavras
+    return palavras;
+}
+
+fn match_grupo() -> String {
+
+    let mut grupo_de_palavras = String::new();
+
+    loop {
+        io::stdin()
+            .read_line(&mut grupo_de_palavras)
+            .expect("Falha ao ler a entrada.");
+
+        match grupo_de_palavras.trim() {
+            "1" => return "frutas.txt".to_string(),
+            "2" => return "animais.txt".to_string(),
+            "3" => return "cores.txt".to_string(),
+             _  => println!("Por favor, insira um grupo valido.")
+        }
+    }
 }
 
