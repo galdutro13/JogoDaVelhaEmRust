@@ -104,7 +104,7 @@ fn ler_chute() -> char {
             .expect("Falha ao ler a entrada.");
 
         match chute.trim().chars().next() {
-            Some(c) if c.is_ascii_alphabetic() => return c.to_ascii_lowercase(),
+            Some(c) if c.is_alphabetic() => return c.to_ascii_lowercase(),
             Some(_) => println!("Por favor, insira uma letra valida."),
             None => println!("Por favor, insira uma letra.")
         }
