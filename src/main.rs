@@ -1,4 +1,5 @@
-use std::io::{self, Write};
+use std::fs::File;
+use std::io::{self, Read, Write};
 
 fn main() {
     println!("Bem vindo ao jogo de HangMan!");
@@ -17,7 +18,7 @@ struct HangManGame{
 impl HangManGame {
 
     fn new() -> Self {
-        let palavras = vec!["chuva", "abridor", "tentativa", "rust", "assado", "carrinho"];
+        let palavras = ler_palavras();
         let palavra_secreta = palavras[rand::random::<usize>() % palavras.len()].to_lowercase();
         let palavra_chutada= String::with_capacity(palavra_secreta.len()); //vec![None; palavra_secreta.len()].to_string();
         let tentativas_incorretas = 0;
@@ -108,5 +109,26 @@ fn ler_chute() -> char {
             None => println!("Por favor, insira uma letra.")
         }
     }
+}
+
+fn ler_palavras() -> Vec<String> {
+
+    print!("Digite o caminho para o arquivo de palavras: ");
+
+    let mut caminho_ao_arquivo = String::new();
+    io::stdin()
+        .read_line(&mut caminho_ao_arquivo)
+        .expect("Falha ao ler a entrada.");
+
+    let mut palavras = vec![];
+    let mut arquivo = File::open("palavras.txt").expect("Arquivo não encontrado.");
+    let mut conteudo = String::new();
+    arquivo.read_to_string(&mut conteudo).expect("Erro ao ler o arquivo.");
+
+    for palavra in conteudo.split_whitespace() {
+        palavras.push(palavra.to_lowercase());
+    }
+
+    palavras
 }
 
